@@ -2,6 +2,59 @@
 
 Track your GitHub projects in influx and create beautiful graphs with Grafana
 
+## Usage
+
+Import statistics for all your source repositories:
+
+```
+$ gitflux repository
+Finding user's source repos...
+Found 83 repos
+Parsing muesli/gitflux
+    Finding PRs for repo...
+    Found 38 PRs!
+    Finding issues for repo...
+    Found 39 issues!
+Parsing muesli/duf
+...
+```
+
+Import statistics for a specific repository:
+
+```
+$ gitflux repository muesli/gitflux
+Parsing muesli/gitflux
+    Finding PRs for repo...
+    Found 38 PRs!
+    Finding issues for repo...
+    Found 39 issues!
+```
+
+Import relationship statistics:
+
+```
+$ gitflux relationships
+Finding relationships for user...
+Found 1109 followers
+```
+
+Import notification statistics:
+
+```
+$ gitflux notifications
+Finding notifications for user...
+Found 14 unread notifications
+```
+
+### Flags
+
+```
+Flags:
+      --influx string          InfluxDB address (default "http://localhost:8086")
+      --influx-bucket string   InfluxDB bucket (default "github")
+      --influx-token string    InfluxDB auth token
+```
+
 ## Screenshots
 
 ### Graphs about you
