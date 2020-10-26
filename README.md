@@ -83,3 +83,12 @@ Flags:
 ![prs](/screenshots/project_prs.png)
 ![pr labels](/screenshots/project_prs_labels.png)
 ![pr bars](/screenshots/project_prs_labels_bars.png)
+
+## TODOs
+
+- Add a `docker-compose.yml` with the following services:
+  - InfluxDB
+  - Grafana
+  - gitflux
+- Provide importable Grafana dashboards
+- More graphs?
