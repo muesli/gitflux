@@ -111,5 +111,4 @@ Flags:
   - InfluxDB
   - Grafana
   - gitflux
-- Provide importable Grafana dashboards
 - More graphs?
