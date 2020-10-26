@@ -70,10 +70,9 @@ Found 14 unread notifications
 ### Flags
 
 ```
-Flags:
-      --influx string          InfluxDB address (default "http://localhost:8086")
-      --influx-bucket string   InfluxDB bucket (default "github")
-      --influx-token string    InfluxDB auth token
+--influx string          InfluxDB address (default "http://localhost:8086")
+--influx-bucket string   InfluxDB bucket (default "github")
+--influx-token string    InfluxDB auth token
 ```
 
 ## Screenshots
