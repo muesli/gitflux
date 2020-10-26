@@ -1,11 +1,10 @@
 # gitflux
 
-Track your GitHub projects in InfluxDB and lets you create beautiful graphs
-with Grafana
+Track your GitHub projects in InfluxDB and create beautiful graphs with Grafana
 
 ## Features
 
-gitflux lets you track:
+Lets you track these things:
 
 - Yourself
   - [x] Follower counts
