@@ -23,7 +23,7 @@ nfpms:
 dockers:
 - image_templates:
   - 'ghcr.io/muesli/gitflux:{{ .Tag }}-amd64'
-  dockerfile: Dockerfile
+  dockerfile: Dockerfile.goreleaser
   use_buildx: true
   build_flag_templates:
   - "--pull"
@@ -35,7 +35,7 @@ dockers:
   - "--platform=linux/amd64"
 - image_templates:
   - 'ghcr.io/muesli/gitflux:{{ .Tag }}-arm64'
-  dockerfile: Dockerfile
+  dockerfile: Dockerfile.goreleaser
   use_buildx: true
   build_flag_templates:
   - "--pull"
