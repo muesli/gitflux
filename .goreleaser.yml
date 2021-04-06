@@ -1,0 +1,57 @@
+before:
+  hooks:
+    - go mod tidy
+gomod:
+  proxy: true
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+nfpms:
+  - homepage: https://fribbledom.com/
+    maintainer: Christian Muehlhaeuser
+    description: Track your GitHub projects in InfluxDB and create beautiful graphs with Grafana
+    formats:
+      - deb
+      - apk
+      - rpm
+dockers:
+- image_templates:
+  - 'ghcr.io/muesli/gitflux:{{ .Tag }}-amd64'
+  dockerfile: Dockerfile.goreleaser
+  use_buildx: true
+  build_flag_templates:
+  - "--pull"
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source=https://github.com/muesli/gitflux"
+  - "--platform=linux/amd64"
+- image_templates:
+  - 'ghcr.io/muesli/gitflux:{{ .Tag }}-arm64'
+  dockerfile: Dockerfile.goreleaser
+  use_buildx: true
+  build_flag_templates:
+  - "--pull"
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source=https://github.com/muesli/gitflux"
+  - "--platform=linux/arm64"
+  goarch: arm64
+docker_manifests:
+- name_template: 'ghcr.io/muesli/gitflux:{{ .Tag }}'
+  image_templates:
+  - 'ghcr.io/muesli/gitflux:{{ .Tag }}-amd64'
+  - 'ghcr.io/muesli/gitflux:{{ .Tag }}-arm64'
+- name_template: 'ghcr.io/muesli/gitflux:latest'
+  image_templates:
+  - 'ghcr.io/muesli/gitflux:{{ .Tag }}-amd64'
+  - 'ghcr.io/muesli/gitflux:{{ .Tag }}-arm64'
