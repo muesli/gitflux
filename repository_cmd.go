@@ -13,7 +13,7 @@ import (
 
 var (
 	repositoryCmd = &cobra.Command{
-		Use:   "repository [foo/bar]",
+		Use:   "repository [owner OR owner/repo]",
 		Short: "tracks repositories",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var repos []Repo
@@ -28,13 +28,20 @@ var (
 
 					repos = append(repos, r)
 				} else {
-					return fmt.Errorf("invalid repository: %s", args[0])
+					org := args[0]
+					fmt.Printf("Finding %s's source repos...\n", org)
+					var err error
+					repos, err = repositories(org)
+					if err != nil {
+						return err
+					}
+					fmt.Printf("Found %d repos\n", len(repos))
 				}
 			} else {
 				// fetch all user source repositories per default
 				fmt.Printf("Finding user's source repos...\n")
 				var err error
-				repos, err = repositories()
+				repos, err = repositories(username)
 				if err != nil {
 					return err
 				}
