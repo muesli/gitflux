@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/shurcooL/githubv4"
@@ -31,12 +30,7 @@ func repository(owner string, name string) (Repo, error) {
 		"name":  githubv4.String(name),
 	}
 
-	err := client.Query(context.Background(), &repoQuery, variables)
-	if err != nil {
-		if strings.Contains(err.Error(), "abuse-rate-limits") {
-			time.Sleep(time.Minute)
-			return repository(owner, name)
-		}
+	if err := queryWithRetry(context.Background(), &repoQuery, variables); err != nil {
 		return Repo{}, err
 	}
 
@@ -53,12 +47,7 @@ func repositories(owner string) ([]Repo, error) {
 			"after":    after,
 		}
 
-		err := client.Query(context.Background(), &reposQuery, variables)
-		if err != nil {
-			if strings.Contains(err.Error(), "abuse-rate-limits") {
-				time.Sleep(time.Minute)
-				continue
-			}
+		if err := queryWithRetry(context.Background(), &reposQuery, variables); err != nil {
 			return nil, err
 		}
 		if len(reposQuery.User.Repositories.Edges) == 0 {

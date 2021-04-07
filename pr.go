@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
@@ -57,12 +56,7 @@ func pullRequests(owner string, name string) ([]PullRequest, error) {
 			"after": after,
 		}
 
-		err := client.Query(context.Background(), &pullRequestsQuery, variables)
-		if err != nil {
-			if strings.Contains(err.Error(), "abuse-rate-limits") {
-				time.Sleep(time.Minute)
-				continue
-			}
+		if err := queryWithRetry(context.Background(), &pullRequestsQuery, variables); err != nil {
 			return nil, err
 		}
 		if len(pullRequestsQuery.Repository.PullRequests.Edges) == 0 {

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/google/go-github/v32/github"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
@@ -63,6 +65,17 @@ func initConnections(cmd *cobra.Command, args []string) error {
 
 	// Use blocking write client for writes to desired bucket
 	influxWriter = idb.WriteAPIBlocking("", influxBucket)
+
+	return nil
+}
+
+func queryWithRetry(ctx context.Context, q interface{}, variables map[string]interface{}) error {
+	if err := client.Query(context.Background(), q, variables); err != nil {
+		if strings.Contains(err.Error(), "abuse-rate-limits") {
+			time.Sleep(time.Minute)
+			return queryWithRetry(ctx, q, variables)
+		}
+	}
 
 	return nil
 }
