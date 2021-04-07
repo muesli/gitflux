@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
@@ -66,12 +65,7 @@ func issues(owner string, name string) ([]Issue, error) {
 			"after": after,
 		}
 
-		err := client.Query(context.Background(), &issuesQuery, variables)
-		if err != nil {
-			if strings.Contains(err.Error(), "abuse-rate-limits") {
-				time.Sleep(time.Minute)
-				continue
-			}
+		if err := queryWithRetry(context.Background(), &issuesQuery, variables); err != nil {
 			return nil, err
 		}
 		if len(issuesQuery.Repository.Issues.Edges) == 0 {

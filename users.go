@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"strings"
-	"time"
 
 	"github.com/shurcooL/githubv4"
 )
@@ -29,12 +27,7 @@ var viewerQuery struct {
 }
 
 func getUsername() (string, error) {
-	err := client.Query(context.Background(), &viewerQuery, nil)
-	if err != nil {
-		if strings.Contains(err.Error(), "abuse-rate-limits") {
-			time.Sleep(time.Minute)
-			return getUsername()
-		}
+	if err := queryWithRetry(context.Background(), &viewerQuery, nil); err != nil {
 		return "", err
 	}
 
@@ -54,12 +47,7 @@ func followers() (int, error) {
 	variables := map[string]interface{}{
 		"username": githubv4.String(username),
 	}
-	err := client.Query(context.Background(), &followersQuery, variables)
-	if err != nil {
-		if strings.Contains(err.Error(), "abuse-rate-limits") {
-			time.Sleep(time.Minute)
-			return followers()
-		}
+	if err := queryWithRetry(context.Background(), &followersQuery, variables); err != nil {
 		return 0, err
 	}
 
