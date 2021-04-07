@@ -13,7 +13,7 @@ import (
 
 var (
 	repositoryCmd = &cobra.Command{
-		Use:   "repository [github.com/foo/bar]",
+		Use:   "repository [foo/bar]",
 		Short: "tracks repositories",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var repos []Repo
