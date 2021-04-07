@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/shurcooL/githubv4"
@@ -32,6 +33,10 @@ func repository(owner string, name string) (Repo, error) {
 
 	err := client.Query(context.Background(), &repoQuery, variables)
 	if err != nil {
+		if strings.Contains(err.Error(), "abuse-rate-limits") {
+			time.Sleep(time.Minute)
+			return repository(owner, name)
+		}
 		return Repo{}, err
 	}
 
@@ -50,6 +55,10 @@ func repositories() ([]Repo, error) {
 
 		err := client.Query(context.Background(), &reposQuery, variables)
 		if err != nil {
+			if strings.Contains(err.Error(), "abuse-rate-limits") {
+				time.Sleep(time.Minute)
+				continue
+			}
 			return nil, err
 		}
 		if len(reposQuery.User.Repositories.Edges) == 0 {
