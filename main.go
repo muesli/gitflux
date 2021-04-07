@@ -16,7 +16,6 @@ import (
 
 var (
 	influx       string
-	influxOrg    string
 	influxToken  string
 	influxBucket string
 
@@ -63,7 +62,7 @@ func initConnections(cmd *cobra.Command, args []string) error {
 	// defer idb.Close()
 
 	// Use blocking write client for writes to desired bucket
-	influxWriter = idb.WriteAPIBlocking(influxOrg, influxBucket)
+	influxWriter = idb.WriteAPIBlocking("", influxBucket)
 
 	return nil
 }
@@ -78,6 +77,5 @@ func main() {
 func init() {
 	rootCmd.PersistentFlags().StringVar(&influx, "influx", "http://localhost:8086", "InfluxDB address")
 	rootCmd.PersistentFlags().StringVar(&influxToken, "influx-token", "", "InfluxDB auth token")
-	rootCmd.PersistentFlags().StringVar(&influxOrg, "influx-org", "default", "InfluxDB org name")
 	rootCmd.PersistentFlags().StringVar(&influxBucket, "influx-bucket", "github", "InfluxDB bucket")
 }
