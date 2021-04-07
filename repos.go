@@ -17,7 +17,7 @@ var reposQuery struct {
 				Node   QLRepository
 			}
 		} `graphql:"repositories(first: 100, after:$after privacy: PUBLIC, isFork: false, ownerAffiliations: OWNER, orderBy: {field: CREATED_AT, direction: DESC})"`
-	} `graphql:"user(login:$username)"`
+	} `graphql:"repositoryOwner(login:$username)"`
 }
 
 var repoQuery struct {
@@ -38,13 +38,13 @@ func repository(owner string, name string) (Repo, error) {
 	return RepoFromQL(repoQuery.Repository), nil
 }
 
-func repositories() ([]Repo, error) {
+func repositories(owner string) ([]Repo, error) {
 	var after *githubv4.String
 	var repos []Repo
 
 	for {
 		variables := map[string]interface{}{
-			"username": githubv4.String(username),
+			"username": githubv4.String(owner),
 			"after":    after,
 		}
 
